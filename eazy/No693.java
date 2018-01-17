@@ -1,3 +1,4 @@
+//can be improved by regex "00|11"
 class Solution {
     public boolean hasAlternatingBits(int n) {
 
