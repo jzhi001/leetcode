@@ -1,41 +1,33 @@
-/*
- * @lc app=leetcode id=44 lang=java
- *
- * [44] Wildcard Matching
- */
+/* * @lc app=leetcode id=44 lang=java * 
+* [44] Wildcard Matching */
 class Solution {
     public boolean isMatch(String s, String p) {
-        if(s == null || p == null) return false;
-        
-        int minlen = 0; // non star chars in pattern
-        for(int i = 0; i < p.length(); i++){
-            if(p.charAt(i) != '*') minlen++;
+        if (s == null || p == null)
+            return false;
+        boolean[][] grid = new boolean[p.length() + 1][s.length() + 1];
+        grid[0][0] = true;
+        for (int i = 1; i <= s.length(); i++)
+            grid[0][i] = false;
+        if (p.length() > 0 && p.charAt(0) == '*')
+            grid[1][0] = true;
+        for (int i = 2; i <= p.length(); i++)
+            grid[i][0] = grid[i - 1][0] && (p.charAt(i - 1) == '*');
+        for (int r = 1; r <= p.length(); r++) {
+            for (int c = 1; c <= s.length(); c++) {
+                boolean ret = false;
+                char cp = p.charAt(r - 1), cs = s.charAt(c - 1);
+                if (grid[r - 1][c - 1]) {
+                    ret = (cp == '*') || (cp == '?') || (cp == cs);
+                }
+                if (!ret && grid[r - 1][c]) {
+                    ret = cp == '*';
+                }
+                if (!ret && grid[r][c - 1]) {
+                    ret = cp == '*';
+                }
+                grid[r][c] = ret;
+            }
         }
-
-        if(minlen > s.length()) return false;
-
-        return recur(s, p, 0, 0, s.length() - minlen);
-    }
-
-    private boolean recur(String s, String p, int is, int ip, int wild){
-        if(ip >= p.length()) return is >= s.length();
-
-        char c = 0;
-        while(ip < p.length() && (c = p.charAt(ip)) != '*'){
-            if(is >= s.length()) return false;
-            if(c != '?' && c != s.charAt(is)) return false;
-            is++;
-            ip++;
-        }
-        if(ip == p.length()) return is >= s.length();
-        // skip continuous stars
-        while(ip + 1 < p.length() && p.charAt(ip + 1) == '*') ip++;
-        // skip 0...wild chars
-        for(int i = 0; i <= wild; i++){
-            if(recur(s, p, is + i, ip + 1, wild - i)) return true;
-        }
-        return false;
-        
+        return grid[p.length()][s.length()];
     }
 }
-
