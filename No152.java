@@ -1,5 +1,5 @@
 public class No152 {
-    public int maxProduct(int[] A) {
+    public int maxProduct_bruteForce(int[] A) {
         if (A == null || A.length == 0) return 0;
 
         int ret = Integer.MIN_VALUE;
