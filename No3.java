@@ -1,5 +1,8 @@
+import java.util.HashMap;
+import java.util.Map;
+
 //can be improved by using set
-public class Solution {
+public class No3 {
 
   public int lengthOfLongestSubstring(String s) {
     if (s == null) return 0;
