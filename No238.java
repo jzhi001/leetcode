@@ -30,4 +30,28 @@ public class No238 {
         return ret;
 
     }
+
+    public int[] productExceptSelf_o1_space(int[] A) {
+        if(A == null || A.length == 0) return null;
+
+        int N = A.length;
+
+        int[] ret = new int[N];
+
+        ret[0] = 1;
+
+        for(int i = 1; i < N; i++){
+            ret[i] = ret[i - 1] * A[i - 1];
+        }
+
+        int R = 1;
+
+        for(int i = N - 2; i >= 0; i--){
+            ret[i] *= R * A[i + 1];
+            R *= A[i + 1];
+        }
+
+        return ret;
+
+    }
 }
