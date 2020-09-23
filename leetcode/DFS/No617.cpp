@@ -1,0 +1,32 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+// TAG: TREE, DFS
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* a, TreeNode* b) {
+
+        if(a == NULL && b == NULL){
+            return NULL;
+        }
+
+        int x = 0;
+
+        if(a != NULL) x += a->val;
+        if(b != NULL) x += b->val;
+
+        TreeNode *node = new TreeNode(x);
+
+        node->left = mergeTrees(a == NULL ? NULL : a->left, b == NULL ? NULL : b->left);
+        node ->right = mergeTrees(a == NULL ? NULL : a->right, b == NULL ? NULL : b->right);
+
+        return node;
+    }
+};
