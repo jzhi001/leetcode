@@ -1,6 +1,7 @@
 /test
 *.sh
 /.vscode
+/acwing
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
