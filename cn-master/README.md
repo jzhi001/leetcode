@@ -19,3 +19,7 @@
 ### 模拟
 
 * [KY58 Repeater](https://www.nowcoder.com/practice/97fd3a67eff4455ea3f4d179d6467de9?tpId=40&&tqId=21389&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
+
+### 大数运算
+
+* [KY101 Powerful Calculator](https://www.nowcoder.com/practice/6bc1dd2ee0ce4257821531719b8d1c83?tpId=40&&tqId=21432&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
