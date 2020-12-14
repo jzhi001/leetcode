@@ -2,6 +2,11 @@
 
 ## 分类(只记录值得做第二遍的问题)
 
+### DP
+
+* [KY22 最大序列和](https://www.nowcoder.com/practice/df219d60a7af4171a981ef56bd597f7b?tpId=40&&tqId=21353&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
+
+
 ### 图论
 
 * Dijkstra
