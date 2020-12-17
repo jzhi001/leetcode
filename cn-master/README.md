@@ -4,6 +4,12 @@
 
 ### DP
 
+#### 背包问题
+
+* [KY59 神奇的口袋](https://www.nowcoder.com/practice/9aaea0b82623466a8b29a9f1a00b5d35?tpId=40&&tqId=21390&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
+
+#### 线性DP
+
 * [KY22 最大序列和](https://www.nowcoder.com/practice/df219d60a7af4171a981ef56bd597f7b?tpId=40&&tqId=21353&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
 
 
