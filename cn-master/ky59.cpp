@@ -10,6 +10,7 @@ const int N = 22;
 
 int n, a[N];
 
+// f[i][j] 前i个物品取总量为j的组合数量
 int main(){
 
     while(cin >> n){
@@ -32,10 +33,6 @@ int main(){
                 if(a[i] <= j) f[i][j] += f[i-1][j-a[i]];
             }
         }
-
-        // for(int i = 0; i <= n; i++){
-        //     for(int j = )
-        // }
 
         cout << f[n][40] << endl;
     }

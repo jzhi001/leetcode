@@ -6,6 +6,8 @@
 
 #### 背包问题
 
+* [KY66 点菜问题](https://www.nowcoder.com/practice/b44f5be34a9143aa84c478d79401e22a?tpId=40&&tqId=21397&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
+
 * [KY59 神奇的口袋](https://www.nowcoder.com/practice/9aaea0b82623466a8b29a9f1a00b5d35?tpId=40&&tqId=21390&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
 
 #### 线性DP
