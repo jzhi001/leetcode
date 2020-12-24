@@ -16,6 +16,9 @@
 
 * [KY22 最大序列和](https://www.nowcoder.com/practice/df219d60a7af4171a981ef56bd597f7b?tpId=40&&tqId=21353&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
 
+* [KY78 最大上升序子'列和](https://www.nowcoder.com/practice/dcb97b18715141599b64dbdb8cdea3bd?tpId=40&&tqId=21409&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
+
+* [KY141 最大连续子序列](https://www.nowcoder.com/practice/afe7c043f0644f60af98a0fba61af8e7?tpId=40&&tqId=21472&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
 
 ### 图论
 
