@@ -20,6 +20,7 @@
 
 * [KY141 最大连续子序列](https://www.nowcoder.com/practice/afe7c043f0644f60af98a0fba61af8e7?tpId=40&&tqId=21472&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
 
+* [KY114 Coincidence](https://www.nowcoder.com/practice/f38fc44b43cf44eaa1de407430b85e69?tpId=40&&tqId=21445&rp=1&ru=/ta/kaoyan&qru=/ta/kaoyan/question-ranking)
 ### 图论
 
 * Dijkstra
