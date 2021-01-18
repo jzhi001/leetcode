@@ -6,18 +6,22 @@ import java.time.Instant;
 import java.util.Random;
 
 /**
- * 运行环境 <b>Java SE 8 以上</b> 我的运行环境
+ * Least requirement <b>Java SE 8 以上</b>
  * 
+ * My Jdk version
  * <pre>
  * openjdk version "11.0.9" 2020-10-20
  * OpenJDK Runtime Environment (build 11.0.9+11)
  * OpenJDK 64-Bit Server VM (build 11.0.9+11, mixed mode)
  * </pre>
  * 
- * 如何运行 正常模式 {@code java Homework1 n} 调试模式 {@code java Homework1 n --debug}
+ * How to run? 
+ * 
+ * Nomal: {@code java Homework1 n} 
+ * Debug: {@code java Homework1 n --debug}
  * <ul>
- * <li>n: 数组长度</li>
- * <li>--debug: 检查结果是否正确，并将排序结果输出到 "sorted-${n}.txt"中</li>
+ * <li>n: length of array</li>
+ * <li>--debug: check the answer and output sorted array to "sorted-${n}.txt"中</li>
  * </ul>
  */
 public class Homework1 {
@@ -26,17 +30,17 @@ public class Homework1 {
 
     private Random random = new Random();
 
-    // 找到 A 的最大元素，将其放入另一个 数组 B 的最后一个条目中
     int[] mySort(int[] A) {
 
         int n = A.length;
         int B[] = new int[n];
 
-        // 每次循环中 B[i+1:n)是正序的
+        // loop variant: B[i+1:n) is sorted
         for (int i = n - 1; i >= 0; i--) {
 
-            int k = -1; // A[0, i]最大值的下标
+            int k = -1; // index of maximum number in A[0, i]
             for (int j = 0; j <= i; j++) {
+                // add io to make running time dirrerence more significant
                 // System.out.printf("i: %d, j: %d, k: %d\n", i, j, k);
                 if (k == -1 || A[k] < A[j]) {
                     k = j;
@@ -53,7 +57,7 @@ public class Homework1 {
         return B;
     }
 
-    // 检查排序结果是否正确
+    // check whether the output array is correct
     void check(int A[]) {
         int n = A.length;
 
