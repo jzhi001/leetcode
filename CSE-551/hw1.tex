@@ -1,0 +1,411 @@
+\documentclass[14pt, a4paper]{article}
+% \usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{clrscode3e}
+\usepackage{listings}
+\usepackage{parskip}
+
+% \setlength{\parskip}{1.2em}
+
+\title{CSE551 Assignment 1}
+\author{Jicheng Zhi}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+
+\newcommand{\qonefunc}{\frac{n^2}{8} - 10n - 4}
+% question 1
+\item Use the definition of $\Theta$-notation to prove that$\qonefunc = \Theta (n^2)$\\
+
+    If $\qonefunc = \Theta (n^2)$, 
+    there must exists positive constants $n_0, c_1, c_2$, 
+    such that $0 \le  c_1n^2 \le \qonefunc \le c_2n^2$ \\
+    
+    Left hand side: choose $n_0 = 101, c_1 = \frac{1}{40}$, for all $n \ge n_0$
+     \begin{align*}
+        c_1n^2 &\le \qonefunc &\\
+        \frac{1}{40} n^2 &\le \frac{1}{8} n^2 - 10n - 4 &\\
+        n^2 &\le 5 n^2 - 400n - 160 &\\
+        400n + 160 &\le 4n^2 &\\
+        100n + 40 &\le n^2 & \\
+        (n \ge 101 \implies 100n &+ 40 \le 100n + n \le n^2) &
+    \end{align*}
+    
+    Right hand side: choose $n_0=101, c_2=\frac{1}{8}$, for all $n \ge n_0$
+    \begin{align*}
+        \qonefunc &\le c_2n^2 &\\
+        \frac{n^2}{8} - 10n - 4 &\le \frac{n^2}{8} &\\
+        -10n - 4 &\le 0 & \\
+        (n \ge 101 \implies &-n \le 0) &\\
+    \end{align*}
+    
+
+
+% question 2
+\item Given the recurrence
+$T(n)=
+\begin{cases}
+    \Theta(1) & \text{n=1}\\
+    3T(n/3)+n & \text{otherwise}
+\end{cases}$ \\
+
+    \begin{enumerate}[label={(\arabic*)}]
+        % question 2.1
+        \item Use the iteration method to devise the solution of the recurrence. \\
+        
+        let $n = 3^k$, $T(n) = T(3^k) = 3 T(3^{k-1}) + 3^k$ 
+        \begin{flalign*}
+            \frac{T(3^k)}{3^k} 
+                &= \frac{3 T(3^{k-1}) + 3^k}{3^k} \\
+                &= \frac{T(3^{k-1})}{3^{k-1}} + 1 \\
+                &= \frac{3T(3^{k-2}) + 3^{k-1}}{3^{k-1}} + 1 \\
+                &= \frac{T(3^{k-2})}{3^{k-2}} + 2 \\
+                &= \frac{T(3^{k-3})}{3^{k-3}} + 3 \\
+                &= \dots \\
+                &= \frac{T(3^{k-k})}{3^{k-k}} + k \\
+                &= 1 + k \\
+            \frac{T(3^k)}{3^k} &= 1 + k \\
+            \frac{T(n)}{n} &= 1 + \log_3 n \\
+            T(n) &= n (1 + \log_3 n)
+        \end{flalign*}
+        
+        choose $c_1 = \frac{1}{\log_2 3}, c_2 = \frac{3}{\log_2 3}, n_0 = 3$,
+        for all $n > n_0$
+        \begin{flalign*}
+            &(\log_3 n = \frac{\log_2 n}{\log_2 3} 
+            \implies \log_2 n = \log_3 n \cdot \log_2 3) 
+        \end{flalign*}
+        \begin{align*}
+            \frac{n \log_2 n}{\log_2 3}    
+                &\le n (1 + \log_3 n)     
+                \le \frac{3n \log_2 n}{\log_2 3} &\\
+            \frac{\log_2 n}{\log_2 3}
+                &\le 1 + \log_3 n        
+                \le \frac{3\log_2 n}{\log_2 3} &\\
+            \frac{\log_3 n \cdot \log_2 3}{\log_2 3}     
+                &\le \log_3 3n 
+                \le \frac{3 \log_3 n \cdot \log_2 3}{\log_2 3} &\\
+            \log_3 n &\le \log_3 3n \le 3 \log_3 n \\
+            \log_3 n &\le \log_3 3n \le \log_3 n^3
+        \end{align*} 
+        
+        Similarly, we can proof that for all $k > 1$, 
+        when $c_1 = \frac{1}{\log_k 3}, c_2 = \frac{3}{\log_k 3}, n_0 = 3$, 
+        $T(n) = \Theta (n \log_k n)$. \\
+        So $ T(n) = \Theta (n \log n)$ \\
+        
+        % question 2.2
+        \item Use the recursion-tree method to devise the solution of the recurrence.
+        
+        \[
+            \begin{array}{|c|c|c|c|}  	% four columns; position text in CENTER of column 
+            \hline				% use `r' for right and `l' for left
+            \mbox{Depth} & \mbox{Number of nodes} & \mbox{Problem size (each node)} & \mbox{ total problem size}\\
+            \hline\hline
+            % depth   & number        & size & total size
+              0       & 1             &  n   & n\\
+            \hline
+              1       & 3             & n/3  & 3(n/3)\\
+            \hline
+              2       & 9             & n/9  & 9(n/9)\\
+            \hline
+             \vdots & \vdots & \vdots & \vdots \\
+            \hline
+            \log_3(n) & 3^{\log_3(n)} & 1    & 3^{\log_3(n)}\\
+            \hline
+            \end{array}
+        \]
+        
+        $T(n) = n \log_3 n = \Theta (n \log n)$ \\
+    \end{enumerate}
+
+\newcommand{\thetaEquation}{0 \le c_1 g(n_0) \le f(n_0) \le c_2 g(n_0)}
+\newcommand{\thetaExpr}{f(n) = \Theta (g(n))}
+\newcommand{\omegaExpr}{f(n) = \Omega (g(n))}
+\newcommand{\ohExpr}{f(n) = O(g(n))}
+% question 3
+\item For each of the following pairs of functions, one of the following relationships holds:
+$f(n) = O(g(n))$, $f(n) = \Omega (g(n))$, $f(n) = \Theta (g(n))$. Determine which relationship holds and briefly explain your answer.
+
+    \begin{enumerate}[label=\alph*.]
+    \newcommand{\tab}{\hspace{1em}}
+    % question 3.a
+    \item $f(n) = \log n^2; \tab \hspace{1em} g(n) = \log n + 5$ \\
+    
+        $\thetaExpr$.\\ 
+        
+        Proof: choose $c_1 = 1, c_2 = 2, n_0 = 32$, for all $n \ge n_0$
+        \begin{flalign*}
+            \text{Left hand side:  }& \\
+            0 &\le c_1 g(n) \le f(n) &\\
+            0 &\le \log n + \log 2^5 \le \log n^2 &\\
+            0 &\le \log {32n} \le \log n^2 &\\
+            0 &\le 32 \le n &\\ 
+            \text{Right hand side:}& \\
+            f(n) &\le c_2 g(n) &\\
+            2 \log n &\le 2\log n + 10 &\\
+            0 &\le 10
+        \end{flalign*}
+        
+    % 3.b
+    \item $f(n) = \sqrt{n}; \tab g(n) = \log n^2$ \\
+    
+         $\omegaExpr$.\\
+    
+        Proof: choose $c_1 = \frac{1}{4}, n_0 = 2$, for all $n \ge n_0$
+        \begin{align*}
+            f(n) &\ge c_1 g(n) &\\
+            \sqrt{n} &\ge \frac{1}{4} \log n^2 &\\
+            \sqrt{n} &\ge \frac{1}{2} \log n & \\
+            \sqrt{n} &\ge \frac{1}{2} \log (\sqrt{n})^2 & \\
+            \sqrt{n} &\ge \log \sqrt{n} & \\
+        \end{align*}
+    
+    % 3.c
+    \item $f(n) = \log n^2; \tab g(n) = \log n$ \\
+    
+        $\thetaExpr$.\\ 
+        
+        Proof: choose $c_1 = 1, c_2 = 3, n_0 = 2$, for all $n \ge n_0$
+        \begin{align*}
+            0 &\le c_1 g(n) \le f(n) \le c_2 g(n) &\\
+            0 &\le \log n \le 2 \log n \le 3 \log n &
+        \end{align*}
+     
+    %3.d   
+    \item $f(n) = n; \tab g(n) = \log^2 n$ \\
+    
+        $\omegaExpr.$\\ 
+        
+        Proof: choose $c_1 = \frac{1}{4}, n_0 = 2$, for all $n \ge n_0$
+        \begin{align*}
+            f(n) &\ge c_1 g(n)&\\
+            n &\ge \frac{(\log n)^2}{4} & \\
+            \sqrt{n} &\ge \frac{\log n}{2}& \\
+            \sqrt{n} & \ge \frac{2 \log \sqrt{n}}{2} &\\
+            \sqrt{n} & \ge \log \sqrt{n}
+        \end{align*}
+        
+    % 3.e
+    \item $f(n) = n \log n + n; \tab g(n) = \log n$ \\
+    
+        $\omegaExpr.$\\ 
+        
+        Proof: choose $c_1 = 1, n_0 = 2$, for all $n \ge n_0$
+        \begin{align*}
+            f(n) &\ge c_1 g(n)&\\
+            n \log n + n &\ge \log n & \\
+            (n-1) \log n + n &\ge 0 &
+        \end{align*}
+    
+    % 3.f
+    \item $f(n) = 10; \tab g(n) = \log 10$ \\
+    
+        $\thetaExpr$.\\ 
+        
+        Proof: choose $c_1 = 1, c_2 = 10, n_0 = 2$, for all $n \ge n_0$
+        \begin{align*}
+            0 &\le c_1 g(n) \le f(n) \le c_2 g(n) &\\
+            0 &\le \log 10 \le 10 \le 10 \log 10 & \\
+            0 &\le \log 10 \le \log 1024 \le \log 10^{10} & \\
+        \end{align*}
+    
+    % 3.g
+    \item $f(n) = 2^n; \tab g(n) = 10 n^2$ \\
+    
+        $\omegaExpr.$\\ 
+        
+        Proof: choose $c_1 = \frac{1}{10}, n_0 = 5$, for all $n \ge n_0$
+         \begin{align*}
+            f(n) &\ge c_1 g(n) & \\
+            2^n &\ge n^2 &
+        \end{align*}
+    
+    % 3.h
+    \item $f(n) = 2^n; \tab g(n) = 3^n$ \\
+    
+        $\ohExpr.$\\ 
+        
+        Proof: choose $c_1 = 1, n_0 = 10$, for all $n \ge n_0$
+         \begin{align*}
+            f(n) &\le c_1 g(n) & \\
+            2^n &\le 3^n &
+        \end{align*}
+    
+    \end{enumerate}
+
+\item Consider sorting n numbers stored in array A. You want to sort the numbers by first finding the largest element of A and putting it in the last entry of another array B. Then find the second largest element of A and put it in the second to last entry of B. Continue this manner for n elements of A.
+
+    \begin{enumerate}[label*=\arabic*]
+        % question 4.1
+        \item Write pseudo code for this algorithm and give the number of times that each instruction will be executed.
+        
+            \begin{codebox}
+            \Procname{$\proc{My-Sort}(A[1 \twodots n])$} 
+            \li $B \gets \func{New-Array}(n)$
+            \>\>\>\>\>\>\>\>\Comment $n$
+            \li \For $i \gets n$ \Downto $\const{1}$ 
+            \>\>\>\>\>\>\>\>\Comment $n + 1$
+            \li    \Do $k \gets \const{-1}$
+            \>\>\>\>\>\>\>\Comment $n$
+            \li         \For $j \gets 1$ \To $i$
+            \>\>\>\>\>\>\>\Comment $\sum_{1}^{n} t_j$
+            \li         \Do \If $k \isequal -1$ or $A[k] < A[j]$
+            \>\>\>\>\>\>\Comment $\sum_{1}^{n} (t_j - 1)$
+            \li             \Then $k \gets j$
+            \>\>\>\>\>\Comment $\sum_{1}^{n} t_p$
+                            \End
+            \li             \If $i + 1 < n$ and $A[k] \isequal B[i + 1]$
+            \>\>\>\>\>\>\Comment $\sum_{1}^{n} (t_j - 1)$
+            \li             \Then \kw{break}
+            \>\>\>\>\>\Comment $\sum_{1}^{n} t_q$
+                            \End
+                        \End
+            \li         $B[i] \gets A[k]$
+            \>\>\>\>\>\>\>\Comment $n$
+            \li         $\func{Swap}(A[i], A[k])$
+            \>\>\>\>\>\>\>\Comment $n$
+                \End
+            \li \Return $B$
+            \end{codebox}
+            
+            To make pseudo code more compact, I moved comments below: \\
+            \\
+            During iteration, we find and put $A[k]$ to $B[i]$. 
+            In inner loop I find an appropriate value for $k$. 
+            If $A[j]$ is equals to previous maximum number, 
+            there's no need to continue. \\
+            \\
+            $t_j$ = repeat times of inner loop; \\
+            $t_p$ = repeat times of assigning a better index to $k$ in each inner loop; \\
+            $t_q$ = total times of breaking the inner loop;
+            \begin{flalign*}
+                & t_p, t_q \le t_j - 1 &
+            \end{flalign*}
+            
+            Total execution time of all instructions: \\
+            \begin{equation*}
+                T(n) = c_2 (n + 1) 
+                    + (c_1 + c_3 + c_9 + c_10) n 
+                    + 2 \sum_{1}^{n} (t_j - 1)
+                    + \sum_{1}^{n} t_p
+                    + \sum_{1}^{n} t_q
+            \end{equation*}
+        
+        % question 4.2
+        \item Give the best-case running time of the algorithm. \\
+        
+        If all elements in input array are equal, for example $[2, 2, 2, 2, 2]$,
+        all inner loops except the first one only repeat once 
+        since $A[k]$ is same as previous maximum number.
+        \begin{flalign*}
+            T(n) &= c_2(n + 1) 
+                + (c_1 + c_3 + c_9 + c_{10}) n 
+                + 4n t_j + 2n t_p + (n - 1) t_q & \\
+                &= \Theta (n) &
+        \end{flalign*}
+        
+        \item Give the worst-case running time of the algorithm. \\
+        
+        If all elements in input array are sorted, 
+        for example $[1, 2, 3, 4, 5]$, 
+        each the inner loop will execute $i$ times, 
+        total execution time of inner loop will be 
+        $\sum_{i = 1}^n i = \frac{n^2 - n}{2}$.
+        
+        \begin{flalign*}
+            T(n) &= c_2(n + 1) 
+                + (c_1 + c_3 + c_9 + c_{10}) n 
+                + \frac{n^2 - n}{2} (c_5 + c_6 + c_7) & \\
+                &= \Theta (n^2) & \\
+        \end{flalign*}
+    \end{enumerate}
+    
+
+
+\item Use a high-level programming language (Java or C++) to write a program to. Implement the algorithm that you developed in the previous question. In this question, you will complete the following sub questions.
+
+    \begin{enumerate}[label*=\arabic*]
+
+        % question 5.1
+        \item For a given input value n, generate n random numbers between 0 and 999 and store these numbers in array A.
+            
+            \begin{verbatim}
+            import java.util.Random;
+            
+            int[] generateArray(int size) {
+            
+                int[] A = new int[size];
+                
+                final Random random = new Random();
+                final int BOUNDARY = 999;
+                
+                for (int i = 0; i < size; i++) {
+                    A[i] = random.nextInt(BOUNDARY);
+                }
+                
+                return A;
+            }   
+            \end{verbatim}
+
+        % question 5.2
+        \item Implement the sorting algorithm and use the array generated in question 5.1 as the input.
+        
+        \begin{verbatim}
+        int[] mySort(int[] A) {
+
+            int n = A.length;
+            int B[] = new int[n];
+    
+            for (int i = n - 1; i >= 0; i--) {
+    
+                int k = -1;
+                for (int j = 0; j <= i; j++) {
+
+                    if (k == -1 || A[k] < A[j]) {
+                        k = j;
+                    }
+                    if (i + 1 < n && A[k] == B[i + 1]) {
+                        break;
+                    }
+                }
+    
+                B[i] = A[k];
+                swap(A, i, k);
+            }
+    
+            return B;
+        }
+        \end{verbatim}
+        
+        \item Print the execution time used for sorting the numbers. Do not include the time for generating the random numbers. Record the following inputs and outputs results in the following table.
+        
+        \[
+            \begin{array}{|c|c|}  	% four columns; position text in CENTER of column 
+            \hline				% use `r' for right and `l' for left
+            \mbox{Size} & \mbox{Execution Time} \\
+            \hline\hline
+            % size   & execution time
+              10    &   61ms \\
+            \hline
+              100   &   542ms \\
+            \hline
+              500   &   10 sec, 17ms \\
+            \hline
+             1000   &   21 sec, 475 ms\\
+            \hline
+            \end{array}
+        \]
+    
+    \end{enumerate}
+
+
+
+\end{enumerate}
+
+\end{document}
