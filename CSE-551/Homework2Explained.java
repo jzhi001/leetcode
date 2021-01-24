@@ -9,11 +9,10 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class Homework2 {
+public class Homework2Explained {
 
     static class Hospital {
         String name;
-        
         // since we never look back, iterator is well enough to go
         Iterator<String> preferences;
 
@@ -98,29 +97,39 @@ public class Homework2 {
             String studentName = h.nextPreference();
             Student s = students.get(studentName);
 
+            System.out.println("dequeue and get " + h.name + ", try giving offer to " + s.name);
 
             if (s == null) {
                 throw new RuntimeException("no user find: " + studentName);
             }
 
-            if(s.isFree() || s.prefer(h.name)){
+            if (!s.isFree() && !s.prefer(h.name)) {
+                // s has a better offer
+                System.out.println(s.name + " has better offer from hospital " + h.name + ", he/she refuses to change");
+            }else{
                 if (!s.isFree()) {
                     // return offer of current hospital
                     Hospital prev = hospitals.get(s.offer);
+                    System.out.println(s.name + " reject current offer " + prev.name + " and accepts hospital " + h.name);
+    
                     prev.cancelOffer(s.name);
-
+    
                     if (prev.isOpen()) {
                         queue.add(prev);
                     }
+                } else {
+                    System.out.println(s.name + " has no offer, so he/she accepts hospital " + h.name);
                 }
-
+    
                 s.acceptOffer(h.name);
                 h.offerTo(s.name);
             }
 
             if (h.isOpen()) {
+                System.out.println(h.name + " has " + h.positions + " open positions, so enqueue " + h.name);
                 queue.add(h);
             }
+            System.out.println();
         }
     }
 
