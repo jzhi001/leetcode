@@ -11,7 +11,9 @@ public class Homework2 {
     
     static class Hospital{
         String name;
+        // since we never look back, iterator is well enough to go
         Iterator<String> preference;
+        // free positions
         int position;
 
         Hospital(String name, int position, List<String> preference){
@@ -25,6 +27,7 @@ public class Homework2 {
         
         String name;
         String offer;
+        // hospital name => ranking
         Map<String, Integer> preference;
 
         Student(String name, List<String> p){
@@ -59,14 +62,16 @@ public class Homework2 {
             Hospital h = queue.peek();
             Student s = students.get(h.preference.next());
 
-            if(!s.isFree() || !s.prefer(h.name)){
+            if(!s.isFree() && !s.prefer(h.name)){
+                // s has a better offer
                 continue;
             }
 
             if(!s.isFree()){
+                // return offer of current hospital
                 Hospital prev = hospitals.get(s.offer);
                 prev.position ++;
-                if(prev.position == 1){
+                if(prev.position > 0){
                     queue.add(prev);
                 }
             }
@@ -80,11 +85,10 @@ public class Homework2 {
         }
     }
     
-    // hospitalCnt studentCnt
-    // (s1) p1 p2 p3
-    // (s2) p1 p2 p3
-    // (h1) 1 (prefer count) 2
-    // (h2) 2 1 3 
+    // Input format:
+    // hospital-count student-count
+    // student1-name preference-count prefernce1 preference2 ...
+    // hospital-name preference-count prefernce1 preference2 ...
     public static void main(String[] args) {
      
         Scanner scanner = new Scanner(System.in);
@@ -131,8 +135,7 @@ public class Homework2 {
         }
 
         for(Map.Entry<String, List<String>> e : hospitalOffers.entrySet()){
-            System.out.printf("%s: %s\n", 
-                e.getKey(), String.join(", ", e.getValue()));
+            System.out.printf("%s: %s%n", e.getKey(), String.join(", ", e.getValue()));
         }
 
         scanner.close();

@@ -1,0 +1,9 @@
+2 6
+Alice Arkham Hilltop
+Bob Hilltop Arkham
+Carl Hilltop
+Danny Arkham
+Ellen Hilltop Arkham
+Frank Arkham
+Arkham Bob Alice
+Hilltop Carl Alice Bob
