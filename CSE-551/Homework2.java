@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,17 +14,21 @@ public class Homework2 {
         String name;
         // since we never look back, iterator is well enough to go
         Iterator<String> preference;
-        // free positions
-        int position;
 
-        Hospital(String name, int position, List<String> preference){
+        int positions;
+        
+        LinkedHashSet<String> offers;
+
+
+        Hospital(String name, int positions, List<String> preference){
             this.name = name;
-            this.position = position;
             this.preference = preference.iterator();
+            this.positions = positions;
+            this.offers = new LinkedHashSet<>();
         }
         
         public boolean isOpen(){
-            return position > 0 && preference.hasNext();
+            return positions > 0 && preference.hasNext();
         }
     }
 
@@ -85,13 +90,13 @@ public class Homework2 {
             if(!s.isFree()){
                 // return offer of current hospital
                 Hospital prev = hospitals.get(s.offer);
-                prev.position ++;
+                prev.offers.remove(s.name);
                 if(prev.isOpen()){
                     queue.add(prev);
                 }
             }
 
-            h.position --;
+            h.offers.add(s.name);
             s.offer = h.name;
             
             if(!h.isOpen()){
@@ -145,17 +150,8 @@ public class Homework2 {
 
         galeShapley(hospitals, students);
 
-        Map<String, List<String>> hospitalOffers = new HashMap<>();
-        for(Student s : students.values()){
-            if(s.isFree()){
-                continue;
-            }
-            hospitalOffers.putIfAbsent(s.offer, new ArrayList<>());
-            hospitalOffers.get(s.offer).add(s.name);
-        }
-
-        for(Map.Entry<String, List<String>> e : hospitalOffers.entrySet()){
-            System.out.printf("%s: %s%n", e.getKey(), String.join(", ", e.getValue()));
+        for(Hospital hospital : hospitals.values()){
+            System.out.printf("%s: %s\n", hospital.name, hospital.offers);
         }
 
         scanner.close();
