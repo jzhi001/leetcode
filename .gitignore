@@ -5,7 +5,12 @@
 /.vscode
 /acwing
 
-playground.ipynb
+*.ipynb
+*.aux
+*.fdb_latexmk
+*.fls
+*.gz
+
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
