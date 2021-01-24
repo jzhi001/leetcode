@@ -21,6 +21,10 @@ public class Homework2 {
             this.position = position;
             this.preference = preference.iterator();
         }
+        
+        public boolean isOpen(){
+            return position > 0 && preference.hasNext();
+        }
     }
 
     static class Student{
@@ -51,16 +55,27 @@ public class Homework2 {
             }
             return preference.get(h) < preference.get(offer);
         }
+
+        @Override
+        public String toString() {
+            return String.format("%s: %s", name, preference);
+        }
     }
 
-    private static void galeShapley(Map<String, Hospital> hospitals, Map<String, Student> students){
+    private static void galeShapley(Map<String, Hospital> hospitals,
+                                    Map<String, Student> students){
 
         Queue<Hospital> queue = new LinkedList<>(hospitals.values());
 
         while(!queue.isEmpty()){
 
             Hospital h = queue.peek();
-            Student s = students.get(h.preference.next());
+            String studentName = h.preference.next();
+            Student s = students.get(studentName);
+
+            if(s == null){
+                throw new RuntimeException("no user find: " + studentName);
+            }
 
             if(!s.isFree() && !s.prefer(h.name)){
                 // s has a better offer
@@ -71,7 +86,7 @@ public class Homework2 {
                 // return offer of current hospital
                 Hospital prev = hospitals.get(s.offer);
                 prev.position ++;
-                if(prev.position > 0){
+                if(prev.isOpen()){
                     queue.add(prev);
                 }
             }
@@ -79,16 +94,18 @@ public class Homework2 {
             h.position --;
             s.offer = h.name;
             
-            if(h.position == 0){
+            if(!h.isOpen()){
                 queue.poll();
             }  
         }
     }
     
     // Input format:
-    // hospital-count student-count
-    // student1-name preference-count prefernce1 preference2 ...
-    // hospital-name preference-count prefernce1 preference2 ...
+    // first line contains 2 numbers: hospital number N and student number M.
+    // for next N lines, each line contains information of a hospital:
+    // <hospital-name> <preference-count> <preference-1> <preference-2> ... 
+    // for next M lines, each line contains information of a student:
+    // <student-name> <preference-count> <preference-1> <preference-2> ... 
     public static void main(String[] args) {
      
         Scanner scanner = new Scanner(System.in);
@@ -107,21 +124,24 @@ public class Homework2 {
             for(int j = 0; j < position; j++){
                 preference.add(scanner.next());
             }
-
             hospitals.put(name, new Hospital(name, position, preference));
         }
+        
 
         for(int i = 0; i < studentNum; i++){
 
             String name = scanner.next();
+            int preferenceCnt = scanner.nextInt();
             List<String> preference = new ArrayList<>();
 
-            for(int j = 0; j < hospitalNum; j++){
+            for(int j = 0; j < preferenceCnt; j++){
                 preference.add(scanner.next());
             }
 
             students.put(name, new Student(name, preference));
         }
+
+        // System.out.println(students);
 
         galeShapley(hospitals, students);
 
