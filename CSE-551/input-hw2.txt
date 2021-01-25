@@ -1,6 +1,6 @@
 2 6
-Arkham 2 Bob Alice
-Hilltop 3 Carl Alice Bob
+Arkham 2 6 Bob Ellen Danny Alice Frank Carl
+Hilltop 3 6 Alice Danny Ellen Carl Frank Bob
 Alice 2 Arkham Hilltop
 Bob 2 Hilltop Arkham
 Carl 2 Hilltop Arkham

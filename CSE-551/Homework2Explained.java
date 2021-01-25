@@ -77,7 +77,8 @@ public class Homework2Explained {
             if (isFree()) {
                 throw new IllegalStateException("student has no offer");
             }
-            return preference.get(h) < preference.get(offer);
+            int cur = preference.getOrDefault(h, Integer.MAX_VALUE);
+            return cur < preference.get(offer);
         }
 
         @Override
@@ -115,6 +116,7 @@ public class Homework2Explained {
                     prev.cancelOffer(s.name);
     
                     if (prev.isOpen()) {
+                        System.out.println(prev.name + " has " + prev.positions + " open positions, so enqueue " + prev.name);
                         queue.add(prev);
                     }
                 } else {
@@ -168,9 +170,10 @@ public class Homework2Explained {
         for (int i = 0; i < hospitalNum; i++) {
             String name = scanner.next();
             int position = scanner.nextInt();
+            int preferenceCnt = scanner.nextInt();
             List<String> preference = new ArrayList<>();
 
-            for (int j = 0; j < position; j++) {
+            for (int j = 0; j < preferenceCnt; j++) {
                 preference.add(scanner.next());
             }
             hospitals.put(name, new Hospital(name, position, preference));

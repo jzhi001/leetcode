@@ -78,7 +78,8 @@ public class Homework2 {
             if (isFree()) {
                 throw new IllegalStateException("student has no offer");
             }
-            return preference.get(h) < preference.get(offer);
+            int cur = preference.getOrDefault(h, Integer.MAX_VALUE);
+            return cur < preference.get(offer);
         }
 
         @Override
@@ -128,20 +129,12 @@ public class Homework2 {
      * Input format:
      * First line contians 2 numbers: hospital count and student count
      * for next N lines, each line contains information of a hospital:
-     * <hospital-name> <preference-count> <preference-1> <preference-2> ...
+     * <hospital-name> <positions> <preference-count> <preference-1> <preference-2> ...
      * for next M lines, each line contains information of a student:
      * <student-name> <preference-count> <preference-1> <preference-2> ...
-     * <p>
-     * 2 6
-     * Arkham 2 Bob Alice
-     * Hilltop 3 Carl Alice Bob
-     * Alice 2 Arkham Hilltop
-     * Bob 2 Hilltop Arkham
-     * Carl 2 Hilltop Arkham
-     * Danny 2 Arkham Hilltop
-     * Ellen 2 Hilltop Arkham
-     * Frank 2 Arkham Hilltop
-     * </p>
+     * 
+     * Example input is in input.txt
+     * please run {@code java Homework2 < input.txt > output.txt} 
      *
      * Note: all {@code Map} implementations are {@code LinkedHashMap},
      * so you don't have to worry about the iteration sequence :)
@@ -159,9 +152,11 @@ public class Homework2 {
         for (int i = 0; i < hospitalNum; i++) {
             String name = scanner.next();
             int position = scanner.nextInt();
+            int preferenceCnt = scanner.nextInt();
+
             List<String> preference = new ArrayList<>();
 
-            for (int j = 0; j < position; j++) {
+            for (int j = 0; j < preferenceCnt; j++) {
                 preference.add(scanner.next());
             }
             hospitals.put(name, new Hospital(name, position, preference));
