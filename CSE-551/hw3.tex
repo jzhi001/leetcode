@@ -1,0 +1,559 @@
+\documentclass[14pt, a4paper]{article}
+% \usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{clrscode3e}
+\usepackage{listings}
+\usepackage{parskip}
+\usepackage{xcolor}     % for colour
+\usepackage{lipsum}     % for sample text
+\usepackage[most]{tcolorbox}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ top=18mm,
+ textwidth=450pt
+ }
+
+% \setlength{\parskip}{1.2em}
+
+\title{CSE551 Assignment 3}
+\author{Jicheng Zhi}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+
+% question 1
+\item For each of the following two statements, decide whether it is true or false. If it is true, give a short explanation. If it is false, give a counterexample.\\
+
+    \begin{enumerate}[label*=\arabic*]
+    
+        % question 1.1
+        \item You are given an instance of the Minimum Spanning Tree Problem 
+        on a graph G, with edge costs that are all positive and distinct. 
+        Let T be a minimum spanning tree for this instance. 
+        Now suppose you replace each edge cost $c_e$ by its square, ${c_e}^2$, 
+        thereby creating a new instance of the problem 
+        with the same graph but different costs.
+        
+        \begin{enumerate}[label*=\arabic*]
+            \item  Tue or false? The new MST T must still be 
+            a minimum spanning tree for this new instance.
+            
+            True.
+            
+            \item If it is true, give a short explanation. If it is false, give a counterexample.
+            
+            Suppose cost of edges are $c_1 < c_2 < c_3 < \ldots < c_n$, after squaring the edges are still 
+            be $c_1 < c_2 < c_3 < \ldots < c_n$. So we will get same result after running Prim of Kruskal algorithm.
+            
+        \end{enumerate}
+        
+        % question 1.2
+        \item Suppose we are given an instance of the Shortest $s - t$ Path Problem 
+        on a directed graph $G$. We assume that all edge costs are positive and distinct. Let $P$ be a minimum-cost $s - t$ path for this instance. 
+        Now suppose we replace each edge cost $c_e$ by its square, ${c_e}^2$, 
+        thereby creating a new instance of the problem 
+        with the same graph but different costs.
+        
+        \begin{enumerate}[label*=\arabic*]
+            \item  Tue or false? The new path $P$ must still be a minimum-cost $s - t$ 
+            path for this new instance.
+            
+            False.
+            
+            \item If it is true, give a short explanation. If it is false, give a counterexample.
+            
+            \begin{figure}[h!]
+            \centering
+            \includegraphics[scale=0.4]{unit3-1}
+            \caption{Q1.22 counterexample}
+            \end{figure}
+            
+            Before squaring, the shortest path is $n_1 \to n_4$ with total cost of $5$. After squaring, 
+            the shortest path is $n_1 \to n_2 \to n_3 \to n_4$, with total cost of $14$.
+            
+        \end{enumerate}
+    \end{enumerate}
+
+% question 2
+\item One of the basic motivations behind the Minimum Spanning Tree Problem is the goal of designing a spanning network for a set of nodes with minimum \textbf{total cost}. 
+Here we explore another type of objective: Design a spanning network to make the most expensive edge is as cheap as possible. \\
+
+    \begin{enumerate}[label*=\arabic*]
+    \item Specifically, let $G = (V , E)$ be a connected graph with $n$ vertices, 
+    $m$ edges, and positive edge costs that you may assume are all distinct. 
+    Let $T = (V , E^{\prime})$ be a spanning tree of $G$. We define the \textit{bottleneck edge} of $T$ to be the edge of $T$ with the greatest cost. 
+    Is every minimum-bottleneck tree of $G$ a minimum spanning tree of $G$? 
+    Prove or give a counterexample. 
+    
+    \begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.4]{unit3-2.png}
+    \caption{Q2.1 counter-example}
+    \end{figure}
+    
+    No.There's two spanning tree with minimum bottleneck: $e_1, e_2, e_4$ and $e_1, e_3, e_4$. 
+    But all of them are minimum bottleneck spanning tree.
+    
+    \item A spanning tree $T$ of $G$ is a \textit{minimum-bottleneck} 
+    spanning \textit{tree} if there is no spanning tree $T^{\prime}$ of $G$ 
+    with a cheaper bottleneck edge. Is every minimum spanning tree of $G$ 
+    a minimum-bottleneck tree of $G$? Prove or give a counterexample. 
+    
+    Yes. If a minimum spanning tree doesn't contain the smallest bottleneck, it's highest cost edge $e = (u, v)$ 
+    are not included in some spanning trees. This means $e$ is not the only edge that connects 
+    clusters that $u$ and $v$ belong to. So we can use a lower cost to construct a spanning tree by not 
+    using $e$, and this contradicts the previous minimum spanning tree.
+    \end{enumerate}
+    
+% question 3
+\item Your friends are planning an expedition to a small town deep in the China North-East next winter break. They have researched all the travel options and have drawn up a directed graph whose nodes represent intermediate destinations and edges represent the roads between them.\\
+
+In the course of this effort, they have also learned that extreme cold weather causes roads in this part of the world to become quite slow in the winter and may cause large travel delays. They have found an excellent travel Web site that can accurately predict how fast they’ll be able to travel along the roads. However, the speed of travel depends on the time of year. More precisely, the Web site answers queries of the following form: given an edge $e = (v, w)$ connecting two locations $v$ and $w$, and given a proposed starting time $t$ from location $v$, the Web site will return a value $f_e(t)$, the predicted arrival time at $w$. The Web site guarantees that $f_e(t) \ge t$ for all edges e and all times $t$ (you cannot travel backward in time), and that $f_e(t)$ is a monotone increasing function of $t$ (that is, you do not arrive earlier by starting later). Other than that, the functions $f_e(t)$ may be arbitrary. For example, in areas where the travel time does not vary with the season, we would have $f_e(t) = t + l_e$, where $l_e$ is the time needed to travel from the beginning to the end of edge $e$.
+
+Your friends want to use the Web site to determine the fastest way to travel through the directed graph from their starting point to their intended destination. You should assume that they start at time 0. Give a polynomial-time algorithm to do this, where we treat a single query to the Web site (based on a specific edge $e$ and a time $t$) as taking a single computational step.
+
+A greedy algorithm can solve this problem correctly. This algorithm is similar to the Dijkstra’s algorithm, except that the static weights on the edges are replaced by the dynamic weights obtained from Web API calls. The algorithm can be outline as follows:
+
+\Umathchardef\xnot="3 \symoperators "0338
+\AtBeginDocument{
+  \renewcommand\not[1]{#1\xnot}
+  \renewcommand{\notin}{\not\in}
+}
+\begin{tcolorbox}[enhanced jigsaw,breakable,pad at break*=1mm,colback=gray!10!white,frame hidden]
+  Begin of Algorithm \\
+  Let $S$ be set of explored nodes (vertices) so far; \\
+  Define the data structure for each $u \in S$, store the earliest time $d(u)$ when we can arrive at u; \\
+  // you may need to define more data structures for storing necessary information; \\
+  Initialize $S = \{ s \}, d(s) = 0$, where $d(u)$ is the earliest time from $s$ to $u$, $d(u) = 0$ when $u = s$; \\
+  \\
+  While $S \neq V$ \\
+  Select a node $v \notin S$, with at least one edge from $S$, for which 
+  $\displaystyle d^{\prime}(v) = \min_{c = (u,v): u \in S} f_e(d(u))$
+  is as small as possible. \\
+  Add $v$ to $S$ and define $d(v) = d^{\prime}(v)$ \\
+  Endwhile\\
+  \\
+  Define function $f_e(u)$, which generates a random number, where $f_e(t) \ge t$ for all edges $e$ and all times $t$, and that $f_e(t)$ is a monotone increasing function of $t$, that is, you do not arrive earlier by starting later. End of Algorithm
+\end{tcolorbox}
+
+You tasks in this assignment questions are:
+
+% 3.1
+\begin{enumerate}[label*=\arabic*]
+\item Calculate the time complexity in big-O notation of the algorithm. Show the steps of your work. 
+
+If we have $N$ nodes and $M$ edges, the time complexity will be $O(N^2)$ without using any extra data structure such as heap. \\
+
+    \begin{codebox}
+    \Procname{$\proc{Shortest-Path}(S, T, N)$} 
+    \li $dist \gets \func{New-Int-Array}(n, \infty)$                \>\>\>\>\>\>\>\>\Comment $n$
+    \li $seen \gets \func{New-Bool-Array}(n, \kw{false})$           \>\>\>\>\>\>\>\>\Comment $n$
+    \li $dist[S] \gets 0$                                           \>\>\>\>\>\>\>\>\Comment $1$
+    \li \For $i \gets 1$ \To $N$                                    \>\>\>\>\>\>\>\>\Comment $n + 1$
+    \li    \Do $t \gets \const{-1}$                                 \>\>\>\>\>\>\>\Comment $n$
+    \li         \For $j \gets 1$ \To $N$                            \>\>\>\>\>\>\>\Comment $(n + 1)^2$
+    \li         \Do \If $seen[j]$                                   \>\>\>\>\>\>\Comment $n^2$
+    \li             \Then \kw{continue}
+                    \End
+    \li             \If $t \isequal -1$ or $dist[t] > dist[j]$      \>\>\>\>\>\>\Comment $n \cdot p, p \le n$
+    \li             \Then $t \gets j$                               \>\>\>\>\>\Comment $n \cdot q, q \le p$
+                    \End
+                \End
+    \li         $seen[t] \gets \kw{true}$                           \>\>\>\>\>\>\>\Comment $n$
+    \li         \For $j$ in $\func{Adjacent}(t)$                    \>\>\>\>\>\>\>\Comment $n \cdot m, m \le n$
+    \li         \Do $w \gets \func{Get-Weight-From-API}(j)$         \>\>\>\>\>\>\Comment $n \cdot m, m \le n$
+    \li         $dist[j] \gets \func{min}(dist[j], dist[t] + w)$    \>\>\>\>\>\>\Comment $n \cdot m, m \le n$
+                \End
+        \End
+    \li \Return $dist[T]$
+    \end{codebox}
+
+During outer iteration (line 4), we try to find a node $t$, which is not is $S$ and has minimum distance from $s$. 
+Since we are not using extra data structure, we have to iterate \textbf{all} nodes in order to figure out $t$ (line 6). 
+Now we get $t$ and add it to $V$, and update distance between $s$ to $t$'s adjacent nodes.
+
+In the worst case, every node in the graph has $N$ edges, which means every node is connected to all nodes including itself. 
+In this case, we need exact $N$ time to find out $t$ and exact $N$ time to update neighbours' distance. 
+Since we have $N$ nodes, the running time of algorithm will be $O(N^2)$.
+
+\item Prove the correctness using induction. Suppose that you build a set $S$ of vertices explored. You prove that the algorithm is correct when $k = 1$. You assume that the algorithm is correct when $|S| = k$, and then you prove that the algorithm is correct when $|S| = k+1$.
+
+When $S$ is empty, we always add starting point $s$ since distance to starting point itself is zero.
+
+Now $S = {s}$, we check edges started from $s$ and pick $e = (s, v)$ with smallest weight $d$. Since all 
+weights are positive, cost of $e$ always less than cost of $(s, x) + (x, v)$.
+
+Now $S$ contains $k$ nodes, and we're going to add $v$ since $dist(s, u) + Weight_{u, v}$ is minimum among 
+distance between $s$ and other nodes in $V$. Consider other paths from $s$ to $v$:
+
+If we choose to reach $v$ by another node $x$ in $S$, $dist(s, u) + Weight(u, v) \le dist(s, x) + Weight(x, v)$ 
+is always true, otherwise the program will pick $x$ instead.
+
+If we choose a path $s \to y \to z \to v$, where $y$ in $S$ and $z$ in $V$, according to the program,  
+$dist(s, u) + Weight(u, v) \le dist(s, y) + Weight(y, z)$, which means 
+$dist(s, u) + Weight(u, v) \le dist(s, y) + Weight(y, z) + Weight(z, v)$. 
+So $s \to u \to v$ is the shortest path between $s$ and $v$.
+
+\item Use a programming language (C++, Java, or Python) to implement the algorithm. 
+
+\item Use the test case in the following diagram to test the program and submit the output generated by the program. Note, you must replace the weights on the edges using the return values of function $f_e(u)$. Make sure your outputs include the random values generated by the function.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{unit3-test-case.png}
+\caption{Q3.4 test-case}
+\end{figure}
+
+Input format: 
+
+First line contains two numbers: number of nodes $N$ and number of edges $M$.\\
+The second line contains tow numbers: starting node $S$ and destination $T$.\\
+For the next $M$ lines, each line contains two number $a$ and $b$, which means there's a directed edge $a \to b$.
+
+Note: the number of nodes are consecutive start from \textbf{1}.
+
+Input of test case according to my program, number of source and destination is 1 and 8.
+
+\begin{tcolorbox}[enhanced jigsaw,breakable,pad at break*=1mm,colback=gray!10!white,frame hidden]
+8 15 \\
+1 8 \\
+1 2 \\
+1 6 \\
+1 7 \\
+2 3 \\
+3 5 \\
+3 8 \\
+4 3 \\
+4 8 \\
+5 4 \\
+5 8 \\
+6 3 \\
+6 5 \\
+6 7 \\
+7 5 \\
+7 8
+\end{tcolorbox}
+
+My output
+
+\begin{tcolorbox}[enhanced jigsaw,breakable,pad at break*=1mm,colback=gray!10!white,frame hidden]
+choosing next node\\
+distance of 1 -> 1 is 0, not in S\\
+distance of 1 -> 2 is INF, not in S\\
+distance of 1 -> 3 is INF, not in S\\
+distance of 1 -> 4 is INF, not in S\\
+distance of 1 -> 5 is INF, not in S\\
+distance of 1 -> 6 is INF, not in S\\
+distance of 1 -> 7 is INF, not in S\\
+distance of 1 -> 8 is INF, not in S\\
+\\
+choosing node 1, time: 0\\
+\\
+query weight with Web API\\
+weight of 1 -> 2 is 6\\
+weight of 1 -> 6 is 4\\
+weight of 1 -> 7 is 11\\
+\\
+choosing next node\\
+distance of 1 -> 1 is 0, already in S\\
+distance of 1 -> 2 is 6, not in S\\
+distance of 1 -> 3 is INF, not in S\\
+distance of 1 -> 4 is INF, not in S\\
+distance of 1 -> 5 is INF, not in S\\
+distance of 1 -> 6 is 4, not in S\\
+distance of 1 -> 7 is 11, not in S\\
+distance of 1 -> 8 is INF, not in S\\
+\\
+choosing node 6, time: 4\\
+\\
+query weight with Web API\\
+weight of 6 -> 3 is 9\\
+weight of 6 -> 5 is 10\\
+weight of 6 -> 7 is 4\\
+\\
+choosing next node\\
+distance of 1 -> 1 is 0, already in S\\
+distance of 1 -> 2 is 6, not in S\\
+distance of 1 -> 3 is 13, not in S\\
+distance of 1 -> 4 is INF, not in S\\
+distance of 1 -> 5 is 14, not in S\\
+distance of 1 -> 6 is 4, already in S\\
+distance of 1 -> 7 is 8, not in S\\
+distance of 1 -> 8 is INF, not in S\\
+\\
+choosing node 2, time: 6\\
+\\
+query weight with Web API\\
+weight of 2 -> 3 is 6\\
+\\
+choosing next node\\
+distance of 1 -> 1 is 0, already in S\\
+distance of 1 -> 2 is 6, already in S\\
+distance of 1 -> 3 is 12, not in S\\
+distance of 1 -> 4 is INF, not in S\\
+distance of 1 -> 5 is 14, not in S\\
+distance of 1 -> 6 is 4, already in S\\
+distance of 1 -> 7 is 8, not in S\\
+distance of 1 -> 8 is INF, not in S\\
+\\
+choosing node 7, time: 8\\
+\\
+query weight with Web API\\
+weight of 7 -> 5 is 9\\
+weight of 7 -> 8 is 8\\
+\\
+choosing next node\\
+distance of 1 -> 1 is 0, already in S\\
+distance of 1 -> 2 is 6, already in S\\
+distance of 1 -> 3 is 12, not in S\\
+distance of 1 -> 4 is INF, not in S\\
+distance of 1 -> 5 is 14, not in S\\
+distance of 1 -> 6 is 4, already in S\\
+distance of 1 -> 7 is 8, already in S\\
+distance of 1 -> 8 is 16, not in S\\
+\\
+choosing node 3, time: 12\\
+\\
+query weight with Web API\\
+weight of 3 -> 5 is 8\\
+weight of 3 -> 8 is 8\\
+\\
+choosing next node\\
+distance of 1 -> 1 is 0, already in S\\
+distance of 1 -> 2 is 6, already in S\\
+distance of 1 -> 3 is 12, already in S\\
+distance of 1 -> 4 is INF, not in S\\
+distance of 1 -> 5 is 14, not in S\\
+distance of 1 -> 6 is 4, already in S\\
+distance of 1 -> 7 is 8, already in S\\
+distance of 1 -> 8 is 16, not in S\\
+\\
+choosing node 5, time: 14\\
+\\
+query weight with Web API\\
+weight of 5 -> 4 is 4\\
+weight of 5 -> 8 is 10\\
+\\
+choosing next node\\
+distance of 1 -> 1 is 0, already in S\\
+distance of 1 -> 2 is 6, already in S\\
+distance of 1 -> 3 is 12, already in S\\
+distance of 1 -> 4 is 18, not in S\\
+distance of 1 -> 5 is 14, already in S\\
+distance of 1 -> 6 is 4, already in S\\
+distance of 1 -> 7 is 8, already in S\\
+distance of 1 -> 8 is 16, not in S\\
+\\
+choosing node 8, time: 16\\
+\\
+query weight with Web API\\
+\\
+choosing next node\\
+distance of 1 -> 1 is 0, already in S\\
+distance of 1 -> 2 is 6, already in S\\
+distance of 1 -> 3 is 12, already in S\\
+distance of 1 -> 4 is 18, not in S\\
+distance of 1 -> 5 is 14, already in S\\
+distance of 1 -> 6 is 4, already in S\\
+distance of 1 -> 7 is 8, already in S\\
+distance of 1 -> 8 is 16, already in S\\
+\\
+choosing node 4, time: 18\\
+\\
+query weight with Web API\\
+weight of 4 -> 3 is 7\\
+weight of 4 -> 8 is 10\\
+\\
+1 -> 6 -> 7 -> 8\\
+Earlist arrival time is 16
+\end{tcolorbox}
+
+\end{enumerate}
+
+% questions end
+\end{enumerate} 
+
+\newpage
+
+Code in $Homework3.java$.
+
+\begin{verbatim}
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Set;
+
+public class Homework3 {
+
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final int INF = 0x3f3f3f3f;
+
+    static class Graph {
+        private int n;
+        private Map<Integer, List<Integer>> g;
+
+        Graph(int nodeCount) {
+            this.n = nodeCount;
+            this.g = new HashMap<>();
+
+            for (int i = 1; i <= n; i++) {
+                g.put(i, new ArrayList<>());
+            }
+        }
+
+        private void validNode(int x) {
+            if (!g.containsKey(x)) {
+                throw new IllegalArgumentException("invalid node number: " + x);
+            }
+        }
+
+        public int nodeCount() {
+            return n;
+        }
+
+        public void addEdge(int s, int t) {
+            validNode(s);
+            validNode(t);
+            g.get(s).add(t);
+        }
+
+        public List<Integer> neighbours(int node) {
+            validNode(node);
+            return g.get(node);
+        }
+    }
+
+    static class WebApi {
+        private Random random;
+        // last returned weight for certain edge
+        // key is #{s + '.' + t}
+        private Map<String, Integer> last;
+
+        WebApi() {
+            // Note: I used fix random seed for simpler debugging
+            // You'll get same result as me with this seed
+            // Please remove this for other test cases
+            this.random = new Random(14557L);
+            this.last = new HashMap<>();
+        }
+
+        public int getWeight(int s, int t) {
+            String key = String.format("%d.%d", s, t);
+            int w = last.computeIfAbsent(key, (k) -> 1);
+            int delta = random.nextInt(10) + 1;
+            w += delta;
+            last.put(key, w);
+
+            System.out.printf("weight of %d -> %d is %d\n", s, t, w);
+
+            return w;
+        }
+    }
+
+    /**
+     * Input format: first line contains 2 numbers: number of nodes N and number
+     * of edges M. Note the number of nodes are consecutive start from <b>1</b>. The
+     * second line contains 2 numbers: starting node S and destination T. For the
+     * next M lines, each line contains 2 number a and b, which means there's a
+     * directed edge between a and b (a -> b).
+     */
+    public static void main(String[] args) {
+
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        int s = scanner.nextInt();
+        int t = scanner.nextInt();
+
+        Graph g = new Graph(n);
+
+        for (int i = 0; i < m; i++) {
+            int a = scanner.nextInt();
+            int b = scanner.nextInt();
+
+            g.addEdge(a, b);
+        }
+
+        shortestPath(g, s, t);
+    }
+
+    public static void shortestPath(Graph G, int S, int T) {
+
+        WebApi webApi = new WebApi();
+        Set<Integer> seen = new HashSet<>();
+
+        int n = G.nodeCount();
+
+        int[] dist = new int[n + 1];
+        Arrays.fill(dist, INF);
+
+        int[] pre = new int[n + 1];
+
+        dist[S] = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            System.out.println("choosing next node");
+
+            int here = -1;
+
+            for (int j = 1; j <= n; j++) {
+                System.out.printf("distance of %d -> %d is %s, %s in S\n", S, j,
+                        dist[j] == INF ? "INF" : String.valueOf(dist[j]), 
+                        seen.contains(j) ? "already" : "not");
+                if (seen.contains(j)) {
+                    continue;
+                }
+                if (here == -1 || dist[here] > dist[j]) {
+                    here = j;
+                }
+            }
+
+            seen.add(here);
+            System.out.printf("\nchoosing node %d, time: %d\n\n", here, dist[here]);
+
+            System.out.println("query weight with Web API");
+            for (int there : G.neighbours(here)) {
+                int w = webApi.getWeight(here, there);
+                if (dist[there] > dist[here] + w) {
+                    dist[there] = dist[here] + w;
+                    pre[there] = here;
+                }
+            }
+            System.out.println();
+        }
+
+        displayPath(pre, S, T);
+
+        System.out.println("Earlist arrival time is " + dist[T]);
+    }
+
+    private static void displayPath(int[] pre, int S, int T) {
+        List<String> path = new ArrayList<>();
+
+        for (int u = T; u != S; u = pre[u]) {
+            path.add(String.valueOf(u));
+        }
+        path.add(String.valueOf(S));
+
+        Collections.reverse(path);
+
+        System.out.println(String.join(" -> ", path));
+    }
+}
+\end{verbatim}    
+
+\end{document}
