@@ -70,6 +70,12 @@ public class Homework4{
             points.add(new Point(x, y));
         }
 
+        double dc = divideAndConquer(points);
+        double bf = bruteForce(points);
+
+        if(dc != bf){
+            throw new RuntimeException(String.format("brute force: %.2f, divide and conquer: %.2f\n", bf, dc));
+        }
     }
 
     public static double divideAndConquer(List<Point> points) {
@@ -89,13 +95,24 @@ public class Homework4{
 
         double ans = Math.min(delta1, delta2);
 
+        final double curMinDist = ans;
         List<Point> pointsInMid = points.stream()
-                                        .filter(pt -> Math.abs(pt.x() - L) <= ans)
+                                        .filter(pt -> Math.abs(pt.x() - L) <= curMinDist)
                                         .sorted(Comparator.comparingInt(Point::y))
                                         .collect(Collectors.toList());
 
         
         final int x = 7;
+
+        for(int i = 0; i < pointsInMid.size() - x; i++){
+            for(int j = i + 1; j < pointsInMid.size(); j++){
+                Point a = pointsInMid.get(i);
+                Point b = pointsInMid.get(j);
+                double dist = distance(a, b);
+
+                ans = Math.min(ans, dist);
+            }
+        }
 
         return ans;
     }
