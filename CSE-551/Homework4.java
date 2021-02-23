@@ -8,25 +8,24 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Homework4{
+public class Homework4 {
 
     /**
-     * Input format:
-     * First line contains a number N, which represents total number of points.
-     * For the next N lines, each line contains 2 numbers x and y, 
-     * which represents a point (x, y).
+     * Input format: First line contains a number N, which represents total number
+     * of points. For the next N lines, each line contains 2 numbers x and y, which
+     * represents a point (x, y).
      * 
      */
     public static void main(String[] args) {
 
         // new RandomTest(1, 16).run();
-        
+
         final Scanner scanner = new Scanner(System.in);
 
         int n = scanner.nextInt();
         List<Point> points = new ArrayList<>();
 
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             int x = scanner.nextInt();
             int y = scanner.nextInt();
             points.add(new Point(x, y));
@@ -35,27 +34,27 @@ public class Homework4{
         double dc = divideAndConquer(points);
         double bf = bruteForce(points);
 
-        if(dc != bf){
-            throw new RuntimeException(String.format("brute force: %.2f, divide and conquer: %.2f\n", bf, dc));
+        if (dc != bf) {
+            throw new RuntimeException(String.format("brute force: %.2f, divide and conquer: %.2f%n", bf, dc));
         }
 
-        System.out.printf("%.2f\n", dc);
+        System.out.printf("%.2f%n", dc);
     }
 
-    static class Point{
+    static class Point {
         private int x;
         private int y;
 
-        Point(int x, int y){
+        Point(int x, int y) {
             this.x = x;
             this.y = y;
         }
 
-        int x(){
+        int x() {
             return this.x;
         }
 
-        int y(){
+        int y() {
             return this.y;
         }
 
@@ -66,34 +65,36 @@ public class Homework4{
 
         @Override
         public boolean equals(Object obj) {
-            if(obj instanceof Point){
-                Point t = (Point)obj;
+            if (obj instanceof Point) {
+                Point t = (Point) obj;
                 return t.x == this.x && t.y == y;
-            }else{
+            } else {
                 return false;
             }
         }
     }
 
-    static class Pair<T>{
+    static class Pair<T> {
         T first;
         T second;
 
-        Pair(T first, T second){
+        Pair(T first, T second) {
             this.first = first;
             this.second = second;
         }
     }
 
-    public static double divideAndConquer(List<Point> points){
+    public static double divideAndConquer(List<Point> points) {
 
-        Collections.sort(points, Comparator.comparingInt(Point::x).thenComparingInt(Point::y));
+        Collections.sort(points, Comparator
+                                        .comparingInt(Point::x)
+                                        .thenComparingInt(Point::y));
         return divideAndConquer(points, 0, points.size() - 1);
     }
 
     public static double divideAndConquer(List<Point> points, int L, int R) {
-        
-        if(L >= R){
+
+        if (L >= R) {
             return Double.POSITIVE_INFINITY;
         }
 
@@ -114,12 +115,12 @@ public class Homework4{
 
         final int scanNum = 7;
 
-        for(int i = 0; i < pointsInMid.size(); i++){
-            for(int j = i + 1, k = 0; j < pointsInMid.size() && k < scanNum; j++, k++){
+        for (int i = 0; i < pointsInMid.size(); i++) {
+            for (int j = i + 1, k = 0; j < pointsInMid.size() && k < scanNum; j++, k++) {
                 Point a = pointsInMid.get(i);
                 Point b = pointsInMid.get(j);
 
-                if(b.y() - a.y() > ans){
+                if (b.y() - a.y() > ans) {
                     continue;
                 }
 
@@ -138,8 +139,8 @@ public class Homework4{
 
         double ans = Double.MAX_VALUE;
 
-        for(int i = 0; i < n - 1; i++){
-            for(int j = i + 1; j < n; j++){
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
                 ans = Math.min(ans, distance(points.get(i), points.get(j)));
             }
         }
@@ -147,13 +148,18 @@ public class Homework4{
         return ans;
     }
 
-    public static double distance(Point a, Point b){
-        double dx = a.x() - b.x();
-        double dy = a.y() - b.y();
+    public static double distance(Point a, Point b) {
+        double dx = (double) a.x() - b.x();
+        double dy = (double) a.y() - b.y();
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    static class RandomTest{
+    // Use it if you want to test this program
+    // with multiple huge input random test cases
+    // this class will do brute force and divide & conquer
+    // for every cases, exception will be thrown if any
+    // two result doesn't match in any test case
+    static class RandomTest {
 
         int cases;
         int boundary = 1000;
@@ -162,20 +168,20 @@ public class Homework4{
 
         private List<Point> points;
 
-        RandomTest(int cases, int totalPoints){
+        RandomTest(int cases, int totalPoints) {
             this.cases = cases;
             this.totalPoints = totalPoints;
         }
 
-        private void prepare(){
-            
+        private void prepare() {
+
             Set<Point> st = new HashSet<>();
 
-            for(int i = 0; i < totalPoints; i++){
+            for (int i = 0; i < totalPoints; i++) {
 
                 Point pt = generatPoint();
 
-                while(st.contains(pt)){
+                while (st.contains(pt)) {
                     pt = generatPoint();
                 }
 
@@ -185,13 +191,13 @@ public class Homework4{
             this.points = new ArrayList<>(st);
         }
 
-        private Point generatPoint(){
+        private Point generatPoint() {
             int x = random.nextInt(boundary);
             int y = random.nextInt(boundary);
             return new Point(x, y);
         }
 
-        public void test(){
+        public void test() {
 
             prepare();
 
@@ -205,15 +211,15 @@ public class Homework4{
 
             System.out.println("divide and conquer: " + dc);
 
-            if(dc != bf){
+            if (dc != bf) {
                 System.err.println(points);
-                throw new RuntimeException(String.format("brute force: %.2f, divide and conquer: %.2f\n", bf, dc));
+                throw new RuntimeException(String.format("brute force: %.2f, divide and conquer: %.2f%n", bf, dc));
             }
         }
 
-        public void run(){
+        public void run() {
 
-            for(int i = 0; i < cases; i++){
+            for (int i = 0; i < cases; i++) {
                 test();
             }
         }
