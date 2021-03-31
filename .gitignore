@@ -5,7 +5,6 @@
 /.vscode
 /acwing
 
-*.ipynb
 *.aux
 *.fdb_latexmk
 *.fls
